@@ -18,6 +18,7 @@ local.properties
 # Keystores and secrets
 *.jks
 *.keystore
+keystore.properties
 
 # Captures / logs
 captures/

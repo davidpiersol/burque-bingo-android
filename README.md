@@ -54,7 +54,7 @@ If you use Android Studio’s default SDK instead, it is often `sdk.dir=/Users/Y
 
 ## Release build
 
-1. Add a **release signing** config in `app/build.gradle.kts` (keystore path and credentials via env or `local.properties` — **never** commit keys or passwords).
+1. **Signing (Play upload key):** Copy `keystore.properties.example` to **`keystore.properties`** (gitignored), put your `.jks` path and passwords there, and keep the keystore file out of git. When that file is present, `release` builds use it; otherwise Gradle still produces a release **AAB** signed with the default debug key (fine for local smoke tests only — use a real keystore before Play).
 2. Build an **AAB** for Play:
 
 ```bash
