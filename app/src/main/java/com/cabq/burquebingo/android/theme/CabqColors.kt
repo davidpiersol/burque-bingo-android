@@ -10,6 +10,8 @@ object CabqColors {
     val Sand = Color(0xFFF6EFE6)
     val SandDeep = Color(0xFFE8DDD2)
     val SkyWash = Color(0xFFDCEEF2)
+    /** Desert backdrop bottom stop (Flutter desert_backdrop). */
+    val DesertWarm = Color(0xFFF2E8DD)
     val Ink = Color(0xFF1A1C1E)
     val InkMuted = Color(0xFF5C5F66)
     val ParksAccent = Color(0xFF2A6B4A)

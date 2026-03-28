@@ -133,50 +133,57 @@ fun PlayScreen(
     ) { innerPadding ->
         val total = theme.squares.size
         val done = theme.squares.count { marked.contains(it.id) }
-        LazyColumn(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
-                .padding(horizontal = 20.dp, vertical = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            contentPadding = PaddingValues(bottom = 32.dp),
+                .padding(innerPadding),
         ) {
-            item {
-                ProgressHeader(done = done, total = total)
-            }
-            item {
-                BingoStrip(
-                    squares = theme.squares,
-                    marked = marked,
-                    onToggle = { toggle(it) },
-                )
-            }
-            item {
-                Spacer(Modifier.height(10.dp))
-                Text(
-                    text = "Checklist",
-                    style = MaterialTheme.typography.titleSmall,
-                    color = CabqColors.InkMuted,
-                    letterSpacing = 0.8.sp,
-                )
-            }
-            itemsIndexed(theme.squares, key = { _, s -> s.id }) { index, square ->
-                SquareChecklistTile(
-                    index = index + 1,
-                    square = square,
-                    isMarked = marked.contains(square.id),
-                    onToggle = { toggle(square.id) },
-                    onLearnMore = {
-                        val ok = openCabqLearnMore(context, square.learnMoreUrl)
-                        if (!ok) {
-                            scope.launch {
-                                snackbarHostState.showSnackbar(
-                                    "Link blocked or unavailable. Only cabq.gov HTTPS links open here.",
-                                )
-                            }
-                        }
-                    },
-                )
+            DesertBackdrop(Modifier.fillMaxSize()) {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 20.dp, vertical = 12.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    contentPadding = PaddingValues(bottom = 32.dp),
+                ) {
+                    item {
+                        ProgressHeader(done = done, total = total)
+                    }
+                    item {
+                        BingoStrip(
+                            squares = theme.squares,
+                            marked = marked,
+                            onToggle = { toggle(it) },
+                        )
+                    }
+                    item {
+                        Spacer(Modifier.height(10.dp))
+                        Text(
+                            text = "Checklist",
+                            style = MaterialTheme.typography.titleSmall,
+                            color = CabqColors.InkMuted,
+                            letterSpacing = 0.8.sp,
+                        )
+                    }
+                    itemsIndexed(theme.squares, key = { _, s -> s.id }) { index, square ->
+                        SquareChecklistTile(
+                            index = index + 1,
+                            square = square,
+                            isMarked = marked.contains(square.id),
+                            onToggle = { toggle(square.id) },
+                            onLearnMore = {
+                                val ok = openCabqLearnMore(context, square.learnMoreUrl)
+                                if (!ok) {
+                                    scope.launch {
+                                        snackbarHostState.showSnackbar(
+                                            "Link blocked or unavailable. Only cabq.gov HTTPS links open here.",
+                                        )
+                                    }
+                                }
+                            },
+                        )
+                    }
+                }
             }
         }
     }
