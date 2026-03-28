@@ -61,6 +61,7 @@ class MainActivity : ComponentActivity() {
                             themes = themes,
                             markedByTheme = markedByTheme,
                             onOpenCard = { theme: BingoCardTheme -> openThemeId = theme.id },
+                            onPullRefresh = { refreshMarks() },
                         )
                     }
                 }

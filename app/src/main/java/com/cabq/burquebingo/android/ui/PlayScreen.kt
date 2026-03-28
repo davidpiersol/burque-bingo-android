@@ -1,5 +1,6 @@
 package com.cabq.burquebingo.android.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -86,6 +87,8 @@ fun PlayScreen(
     LaunchedEffect(theme.id) {
         marked = progressStore.loadMarked(theme.id)
     }
+
+    BackHandler(onBack = onBack)
 
     fun persistAndNotify(ids: Set<String>) {
         progressStore.saveMarked(theme.id, ids)

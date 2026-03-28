@@ -46,6 +46,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
+import androidx.compose.material3.pulltorefresh.pullToRefresh
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -54,6 +58,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -68,6 +74,7 @@ import com.cabq.burquebingo.android.config.FeedbackConfig
 import com.cabq.burquebingo.android.data.BingoCardTheme
 import com.cabq.burquebingo.android.security.openTrustedCityWebUrl
 import com.cabq.burquebingo.android.theme.CabqColors
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 private const val URL_ONE_ALBUQUERQUE = "https://www.cabq.gov/one-albuquerque"
@@ -89,12 +96,23 @@ fun HomeScreen(
     themes: List<BingoCardTheme>,
     markedByTheme: Map<String, Set<String>>,
     onOpenCard: (BingoCardTheme) -> Unit,
+    onPullRefresh: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     var showFeedbackSheet by remember { mutableStateOf(false) }
+    var isRefreshing by remember { mutableStateOf(false) }
+    val pullRefreshState = rememberPullToRefreshState()
+    val onRefreshBlock: () -> Unit = {
+        scope.launch {
+            isRefreshing = true
+            onPullRefresh()
+            delay(350)
+            isRefreshing = false
+        }
+    }
 
     if (showFeedbackSheet) {
         ModalBottomSheet(
@@ -149,12 +167,32 @@ fun HomeScreen(
                 .padding(innerPadding),
         ) {
             DesertBackdrop(Modifier.fillMaxSize()) {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 20.dp, vertical = 8.dp),
-                    verticalArrangement = Arrangement.spacedBy(14.dp),
+                PullToRefreshBox(
+                    isRefreshing = isRefreshing,
+                    onRefresh = onRefreshBlock,
+                    state = pullRefreshState,
+                    modifier = Modifier.fillMaxSize(),
+                    indicator = {
+                        PullToRefreshDefaults.Indicator(
+                            modifier = Modifier.align(Alignment.TopCenter),
+                            isRefreshing = isRefreshing,
+                            state = pullRefreshState,
+                            containerColor = CabqColors.Sand,
+                            color = CabqColors.Primary,
+                        )
+                    },
                 ) {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .pullToRefresh(
+                                isRefreshing = isRefreshing,
+                                state = pullRefreshState,
+                                onRefresh = onRefreshBlock,
+                            )
+                            .padding(horizontal = 20.dp, vertical = 8.dp),
+                        verticalArrangement = Arrangement.spacedBy(14.dp),
+                    ) {
                     item { BrandingHeader() }
                     item {
                         Text(
@@ -193,6 +231,7 @@ fun HomeScreen(
                         )
                     }
                     item { Spacer(Modifier.height(24.dp)) }
+                    }
                 }
             }
         }
@@ -473,7 +512,9 @@ private fun CityFooter(
             SOCIAL_LINKS.forEach { link ->
                 TextButton(
                     onClick = { onOpenSocial(link.url) },
-                    modifier = Modifier.padding(horizontal = 2.dp),
+                    modifier = Modifier
+                        .padding(horizontal = 2.dp)
+                        .semantics { contentDescription = link.contentDescription },
                 ) {
                     Text(
                         link.shortLabel,
