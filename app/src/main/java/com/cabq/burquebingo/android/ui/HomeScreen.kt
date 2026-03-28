@@ -23,7 +23,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
-import androidx.compose.material.icons.filled.AccountBalance
 import androidx.compose.material.icons.filled.Feedback
 import androidx.compose.material.icons.filled.KeyboardDoubleArrowDown
 import androidx.compose.material.icons.filled.Palette
@@ -74,6 +73,8 @@ import com.cabq.burquebingo.android.config.FeedbackConfig
 import com.cabq.burquebingo.android.data.BingoCardTheme
 import com.cabq.burquebingo.android.security.openTrustedCityWebUrl
 import com.cabq.burquebingo.android.theme.CabqColors
+import com.cabq.burquebingo.android.ui.branding.CityOfAlbuquerqueWordmark
+import com.cabq.burquebingo.android.ui.branding.CitySealBadge
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -252,13 +253,8 @@ private fun BrandingHeader() {
             )
             .padding(22.dp),
     ) {
-        Text(
-            text = "City of Albuquerque",
-            style = MaterialTheme.typography.labelLarge,
-            color = Color.White.copy(alpha = 0.92f),
-            fontWeight = FontWeight.SemiBold,
-        )
-        Spacer(Modifier.height(6.dp))
+        CityOfAlbuquerqueWordmark(maxHeight = 56.dp)
+        Spacer(Modifier.height(10.dp))
         Text(
             text = "Burque Bingo",
             style = MaterialTheme.typography.headlineSmall,
@@ -475,12 +471,7 @@ private fun CityFooter(
                 horizontalArrangement = Arrangement.Start,
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                Icon(
-                    Icons.Filled.AccountBalance,
-                    contentDescription = null,
-                    tint = CabqColors.Primary,
-                    modifier = Modifier.size(38.dp),
-                )
+                CitySealBadge(size = 38.dp)
                 Spacer(Modifier.width(10.dp))
                 Text(
                     text = "City of Albuquerque — cabq.gov",
