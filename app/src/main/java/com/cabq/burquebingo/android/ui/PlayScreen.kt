@@ -150,7 +150,11 @@ fun PlayScreen(
                     contentPadding = PaddingValues(bottom = 32.dp),
                 ) {
                     item {
-                        ProgressHeader(done = done, total = total)
+                        ProgressHeader(
+                            subtitle = theme.subtitle,
+                            done = done,
+                            total = total,
+                        )
                     }
                     item {
                         BingoStrip(
@@ -244,7 +248,7 @@ fun PlayScreen(
 }
 
 @Composable
-private fun ProgressHeader(done: Int, total: Int) {
+private fun ProgressHeader(subtitle: String, done: Int, total: Int) {
     val value = if (total == 0) 0f else done.toFloat() / total
     Column(
         modifier = Modifier
@@ -254,6 +258,12 @@ private fun ProgressHeader(done: Int, total: Int) {
             .border(1.dp, CabqColors.Primary.copy(alpha = 0.08f), RoundedCornerShape(20.dp))
             .padding(18.dp),
     ) {
+        Text(
+            text = subtitle,
+            style = MaterialTheme.typography.bodySmall,
+            color = CabqColors.InkMuted,
+        )
+        Spacer(Modifier.height(10.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
