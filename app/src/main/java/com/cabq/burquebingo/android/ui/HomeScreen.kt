@@ -24,11 +24,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
 import androidx.compose.material.icons.filled.Feedback
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.filled.KeyboardDoubleArrowDown
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Park
 import androidx.compose.material.icons.filled.Restaurant
 import androidx.compose.material.icons.outlined.VerifiedUser
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -69,6 +71,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.cabq.burquebingo.android.BuildConfig
 import com.cabq.burquebingo.android.config.FeedbackConfig
 import com.cabq.burquebingo.android.data.BingoCardTheme
 import com.cabq.burquebingo.android.security.openTrustedCityWebUrl
@@ -104,6 +107,7 @@ fun HomeScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     var showFeedbackSheet by remember { mutableStateOf(false) }
+    var showAbout by remember { mutableStateOf(false) }
     var isRefreshing by remember { mutableStateOf(false) }
     val pullRefreshState = rememberPullToRefreshState()
     val onRefreshBlock: () -> Unit = {
@@ -113,6 +117,25 @@ fun HomeScreen(
             delay(350)
             isRefreshing = false
         }
+    }
+
+    if (showAbout) {
+        AlertDialog(
+            onDismissRequest = { showAbout = false },
+            title = { Text("Burque Bingo") },
+            text = {
+                Text(
+                    "Version ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})\n" +
+                        "${BuildConfig.APPLICATION_ID}\n\n" +
+                        "City of Albuquerque scavenger bingo. Official learn-more links open on cabq.gov.",
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = { showAbout = false }) {
+                    Text("OK")
+                }
+            },
+        )
     }
 
     if (showFeedbackSheet) {
@@ -147,6 +170,11 @@ fun HomeScreen(
             TopAppBar(
                 title = { Text("Burque Bingo") },
                 actions = {
+                    IconButton(
+                        onClick = { showAbout = true },
+                    ) {
+                        Icon(Icons.Outlined.Info, contentDescription = "About this app")
+                    }
                     IconButton(
                         onClick = { showFeedbackSheet = true },
                     ) {
