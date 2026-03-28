@@ -20,14 +20,7 @@ Installed via **Homebrew** (CLI-friendly) plus the **Android Studio** app:
 
 After opening a new terminal, `java`, `adb`, and `sdkmanager` should work (see `~/.zshrc`).
 
-**Optional — make `/usr/bin/java` use JDK 17 (password prompt):**  
-Automated tools here cannot enter your macOS password; run **once** in **Terminal.app** (or iTerm):
-
-```bash
-sudo ln -sfn /opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk-17.jdk
-```
-
-Gradle and Android Studio already work via `JAVA_HOME` in `~/.zshrc`; this symlink only helps tools that invoke `java` without `JAVA_HOME`.
+**System `java` (optional, one-time):** If you ran the symlink in Terminal.app (`sudo ln -sfn /opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk-17.jdk`), then `/usr/bin/java -version` should report **OpenJDK 17**. That helps tools that call `java` without `JAVA_HOME`. Gradle and Android Studio still use `JAVA_HOME` from `~/.zshrc` when set.
 
 ## Open and run
 
