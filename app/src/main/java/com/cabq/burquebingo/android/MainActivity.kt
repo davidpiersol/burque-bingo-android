@@ -28,6 +28,7 @@ import com.cabq.burquebingo.android.ui.PlayScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        SplashInstaller.install(this)
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
