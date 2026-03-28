@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.gothamconsulting.burquebingo.android"
+    namespace = "com.cabq.burquebingo.android"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.gothamconsulting.burquebingo.android"
+        applicationId = "com.cabq.burquebingo.android"
         minSdk = 26
         targetSdk = 35
         versionCode = 1

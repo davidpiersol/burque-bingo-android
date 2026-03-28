@@ -2,7 +2,7 @@
 
 Standalone **native Kotlin / Jetpack Compose** app. This tree is intended to live on **local disk** (for example under your home folder), not inside cloud-synced developer roots, so Gradle and the Android SDK behave predictably.
 
-- **Application id:** `com.gothamconsulting.burquebingo.android` (its own Play Console app; not shared with any iOS or other Android variant unless you change it deliberately).
+- **Application id:** `com.cabq.burquebingo.android` (its own Play Console app; not shared with any iOS or other Android variant unless you change it deliberately).
 - **Project location example:** `/Users/davidpiersol/burque-bingo-android`
 
 ## Prerequisites

@@ -1,4 +1,4 @@
-package com.gothamconsulting.burquebingo.android
+package com.cabq.burquebingo.android
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

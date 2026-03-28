@@ -9,7 +9,7 @@ This repository is a **standalone native Android game** named **Burque Bingo** (
 ## Repository
 
 - **Android-only** Kotlin / Jetpack project; keep it self-contained.
-- **`applicationId` / `namespace`:** `com.gothamconsulting.burquebingo.android` — reserved for **this** Google Play listing. Change only if the owner supplies a different Play application id.
+- **`applicationId` / `namespace`:** `com.cabq.burquebingo.android` — reserved for **this** Google Play listing. Do not use personal/vendor IDs (e.g. Gotham Consulting) in package or application id unless the owner explicitly asks.
 
 ## Your role
 
