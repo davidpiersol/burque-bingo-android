@@ -5,33 +5,50 @@ Standalone **native Kotlin / Jetpack Compose** app. This tree is intended to liv
 - **Application id:** `com.cabq.burquebingo.android` (its own Play Console app; not shared with any iOS or other Android variant unless you change it deliberately).
 - **Project location example:** `/Users/davidpiersol/burque-bingo-android`
 
-## Prerequisites
+## Prerequisites (this Mac)
 
-- **Android Studio** (recent stable) — brings the **Android SDK** and emulator tooling.
-- **JDK 17** for Gradle (Android Studio can use its bundled runtime for the IDE).
+Installed via **Homebrew** (CLI-friendly) plus the **Android Studio** app:
+
+| Piece | Role |
+|--------|------|
+| `brew install openjdk@17` | JDK for Gradle (`JAVA_HOME` in `~/.zshrc`) |
+| `brew install --cask android-commandlinetools` | SDK, `sdkmanager`, `avdmanager`, `adb` |
+| `brew install --cask android-studio` | IDE, Device Manager, graphical emulator |
+
+**SDK location (Homebrew):** `/opt/homebrew/share/android-commandlinetools`  
+**Emulator AVD:** `BurqueBingo_API35` (Pixel 8, Android 35, Google APIs, arm64)
+
+After opening a new terminal, `java`, `adb`, and `sdkmanager` should work (see `~/.zshrc`).
 
 ## Open and run
 
-1. **Android Studio** → **Open** → choose this folder (`burque-bingo-android`).
-2. Let **Gradle sync** finish; install any suggested SDK packages.
-3. Run on an **AVD** or a USB device with **USB debugging** enabled.
+1. **Android Studio** → **Open** → choose this folder (`burque-bingo-android`).  
+   If Studio asks for an SDK path, set it to `/opt/homebrew/share/android-commandlinetools` (or rely on `local.properties` below).
+2. Let **Gradle sync** finish.
+3. Start the **BurqueBingo_API35** virtual device (Device Manager), or connect a USB device with **USB debugging**.
 
-Or from a terminal (after `local.properties` exists or `ANDROID_HOME` is set):
+**Terminal — build and install** (emulator running or device attached):
 
 ```bash
 cd /Users/davidpiersol/burque-bingo-android
 ./gradlew :app:installDebug
 ```
 
-## Command-line SDK path
+**Terminal — start emulator only:**
 
-Create `local.properties` in the project root (gitignored):
-
-```properties
-sdk.dir=/Users/davidpiersol/Library/Android/sdk
+```bash
+emulator -avd BurqueBingo_API35
 ```
 
-Adjust if your SDK is installed elsewhere.
+## `local.properties` (SDK path)
+
+This repo may include a gitignored `local.properties` pointing at the Homebrew SDK:
+
+```properties
+sdk.dir=/opt/homebrew/share/android-commandlinetools
+```
+
+If you use Android Studio’s default SDK instead, it is often `sdk.dir=/Users/YOU/Library/Android/sdk`.
 
 ## Release build
 
