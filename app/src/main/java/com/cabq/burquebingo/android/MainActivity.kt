@@ -4,28 +4,48 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.graphics.Color
+import com.cabq.burquebingo.android.data.BingoCardTheme
+import com.cabq.burquebingo.android.data.defaultCardThemes
+import com.cabq.burquebingo.android.theme.CabqColors
+import com.cabq.burquebingo.android.ui.HomeScreen
+import com.cabq.burquebingo.android.ui.PlayScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            BurqueBingoTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Surface(modifier = Modifier.padding(innerPadding)) {
-                        HomePlaceholder(
-                            title = stringResource(R.string.app_name),
+            val dark = isSystemInDarkTheme()
+            MaterialTheme(colorScheme = if (dark) cabqDarkColorScheme() else cabqLightColorScheme()) {
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    var openThemeId by rememberSaveable { mutableStateOf<String?>(null) }
+                    val themes = remember { defaultCardThemes() }
+                    val markedByTheme = remember { emptyMap<String, Set<String>>() }
+
+                    val openTheme = openThemeId?.let { id -> themes.find { it.id == id } }
+                    if (openTheme != null) {
+                        PlayScreen(
+                            theme = openTheme,
+                            onBack = { openThemeId = null },
+                        )
+                    } else {
+                        HomeScreen(
+                            themes = themes,
+                            markedByTheme = markedByTheme,
+                            onOpenCard = { theme: BingoCardTheme -> openThemeId = theme.id },
                         )
                     }
                 }
@@ -34,24 +54,20 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
-private fun HomePlaceholder(title: String, modifier: Modifier = Modifier) {
-    Text(
-        text = title,
-        modifier = modifier.padding(24.dp),
-        style = MaterialTheme.typography.headlineMedium,
-    )
-}
+private fun cabqLightColorScheme() = lightColorScheme(
+    primary = CabqColors.Primary,
+    onPrimary = Color.White,
+    secondary = CabqColors.Secondary,
+    surface = CabqColors.Sand,
+    onSurface = CabqColors.Ink,
+    surfaceContainerHighest = CabqColors.SandDeep,
+    outline = CabqColors.InkMuted.copy(alpha = 0.35f),
+)
 
-@Composable
-private fun BurqueBingoTheme(content: @Composable () -> Unit) {
-    MaterialTheme(content = content)
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun HomePlaceholderPreview() {
-    BurqueBingoTheme {
-        HomePlaceholder(title = "Burque Bingo")
-    }
-}
+private fun cabqDarkColorScheme() = darkColorScheme(
+    primary = CabqColors.SecondarySoft,
+    onPrimary = CabqColors.Ink,
+    secondary = CabqColors.Secondary,
+    surface = CabqColors.PrimaryDeep,
+    onSurface = Color.White,
+)
